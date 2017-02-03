@@ -1,0 +1,233 @@
+<html lang="en" ng-app="app">
+
+<head>
+    <title> ControlPanelJS</title>
+</head>
+
+<body>
+
+    <div ng-controller="LineCtrl as line">
+        <div id="mousemove" style="height: 80;" ng-mousemove="mouseDown($event)">
+            <button ng-click="toggle()">Toggle</button> Mouse move at:{{X}},{{Y}}
+        </div>
+        <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-series="series" chart-options="options" 
+        chart-dataset-override="datasetOverride" chart-type="type" >
+</canvas>
+
+    </div>
+
+
+    <div ng-controller="BarCtrl as barctr">
+        <canvas id="bar" class="chart chart-bar" chart-data="barChart.data" chart-labels="barChart.labels" chart-options="barChart.options"  chart-dataset-override="barChart.datasetOverride" chart-colors="barChart.colors"> chart-series="series"
+</canvas>
+    </div>
+
+    <div ng-controller="DoughnutCtrl as doung">
+        <canvas id="bar" class="chart chart-doughnut" chart-data="data" chart-labels="labels"> chart-series="series"
+</canvas>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="../node_modules/angular-chart.js/node_modules/chart.js/dist/Chart.min.js"></script>
+<script src="../node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
+<script type="text/javascript">
+    var app = angular.module("app", ["chart.js"]);
+
+    // Optional configuration
+    /* app.config(['ChartJsProvider', function (ChartJsProvider) {
+       // Configure all charts
+       ChartJsProvider.setOptions({
+      chartColors: ['#FF5252'],
+      backgroundColor: "rgba(159,204,0, 0.2)",
+          animation : false
+         
+       });
+        ChartJsProvider.setOptions('line', {
+              fillStyle: '#fff',
+         showLines: true
+       });
+     
+     }]);*/
+    app.controller('DoughnutCtrl', ['$scope', '$timeout', function($scope, $timeout) {
+        $scope.labels = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales'];
+        $scope.data = [0, 0, 0];
+
+        $timeout(function() {
+            $scope.data = [350, 450, 100];
+        }, 500);
+    }]);
+
+    app.controller('BarCtrl', ['$scope', function($scope) {
+        
+        $scope.barChart={};
+        
+        /* legend: {
+                display: true
+            },*/
+        $scope.barChart.options = {
+           
+            scales: {
+               xAxes: [{
+                            display: false}],
+                             yAxes: [{
+                            display: false}]
+         
+            }
+        };
+        $scope.barChart.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
+        $scope.barChart.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+        $scope.barChart.series = ['Series A', 'Series B', 'Series C'];
+        $scope.barChart.data = [
+            [65, 59, 80, 81, 56, 55, 40],
+            [28, 48, 40, 19, 86, 27, 90],
+            [44, 12, 72, 98, 11, 5, 40]
+        ];
+        $scope.barChart.datasetOverride = [{
+            label: "Bar chart",
+            borderWidth: 3,
+            tension:0.2,
+            type: 'line',
+            fill:false,
+           
+         
+        }, {
+            label: "Line chart",
+            borderWidth: 3,
+         //   hoverBackgroundColor: "rgba(255,99,132,0.4)",
+           // hoverBorderColor: "rgba(255,99,132,1)",
+            tension:0.2,
+            type: 'line',
+            fill:false
+        
+        },
+        {
+            label: "Line chart 2",
+            borderWidth: 3,
+            //borderColor:'rgb(75, 192, 192,1)',
+            tension:0.2,
+            //backgroundColor:'rgb(75, 192, 192,1)',
+            type: 'line',
+            fill:false
+        }];
+    }]);
+
+
+    app.controller("LineCtrl", ['$scope', '$timeout', '$interval', function($scope, $timeout, $interval) {
+
+        var stop;
+        $scope.options = {
+            animation: false,
+            borderColor:'rgba(255,99,132,1)',
+            tension:0,
+            backgroundColor:'rgba(0,0,0,0.1)',
+            scaleOverride:true,
+            
+             scales: {
+                 autoSkip:true,
+               xAxes: [{
+                            display: false}],
+                             yAxes: [{
+                            display: false}]
+         
+            }
+        };
+
+        $scope.toggle = function() {
+            $scope.type = $scope.type === 'linear' ?
+                'bar' : 'linear';
+        };
+        $scope.labels = ["-"];
+        $scope.series = ['Series A'];
+        $scope.data = [
+            [0]
+
+        ];
+     /*   $scope.onClick = function(points, evt) {
+            console.log(points, evt);
+        };*/
+        // $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
+        /* $scope.options = {
+           scales: {
+             yAxes: [
+               {
+                 id: 'y-axis-1',
+                 type: 'line',
+                 display: true,
+                 position: 'left'
+               }
+             ]
+           }
+         };*/
+
+
+
+        $scope.lastmousex = -1;
+        $scope.lastmousey = -1;
+        $scope.lastmousetime;
+        $scope.mousetravel = 0;
+        $scope.mpoints = [];
+        $scope.mpoints_max = 30;
+        $scope.mousex = 0;
+        $scope.mousey = 0;
+        $scope.start = false;
+
+        $scope.mouseDown = function(event) {
+            $scope.mousex = event.clientX;
+            $scope.mousey = event.clientY;
+
+
+            $scope.mousetravel += Math.max(Math.abs($scope.mousex - $scope.lastmousex), Math.abs($scope.mousey - $scope.lastmousey));
+
+            $scope.lastmousex = $scope.mousex;
+            $scope.lastmousey = $scope.mousey;
+            if (!$scope.start) {
+                $scope.start = true;
+                stop = $interval(function() {
+                    $scope.mdraw()
+                }, 500);
+            }
+
+        };
+
+
+
+
+        $scope.mdraw = function() {
+            console.log("Draw");
+            var md = new Date();
+
+            var timenow = md.getTime();
+
+
+            $scope.X = $scope.lastmousetime;
+            if ($scope.lastmousetime && $scope.lastmousetime != timenow) {
+                var pps = Math.round($scope.mousetravel / (timenow - $scope.lastmousetime) * 1000);
+
+                $scope.mousetravel = 0;
+                $scope.X = pps;
+                $scope.data[0].push(pps);
+                if ($scope.data[0].length > 9) {
+                    $scope.data[0].shift();
+
+                }
+                else if ($scope.labels.length < 9) {
+                    $scope.labels.push("-");
+                }
+            }
+            else {
+                $scope.X = "ZEROOO";
+            }
+            $scope.lastmousetime = timenow;
+
+
+
+
+        }
+
+
+
+    }]);
+</script>
+
+</html>

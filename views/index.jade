@@ -1,0 +1,36 @@
+html(lang='en', ng-app='controlpanel')
+  head
+    title  ControlPanelJS
+    style.anchorjs.
+    link(href='https://getbootstrap.com/dist/css/bootstrap.min.css', rel='stylesheet')
+    link#bs-theme-stylesheet(href='data:text/css;charset=utf-8,', data-href='https://getbootstrap.com//dist/css/bootstrap-theme.min.css', rel='stylesheet')
+    link(href='https://getbootstrap.com/assets/css/docs.min.css', rel='stylesheet')
+    link(href='stylesheets/menuslide.css', rel='stylesheet')
+    //
+      if lt IE 9script(src='http://getbootstrap.com/assets/js/ie8-responsive-file-warning.js')
+      http://webapplayers.com/inspinia_admin-v2.6.2.1/Angular/#/dashboards/dashboard_1
+  body.cbp-spmenu-push(style='background-color: #f3f3f4;')
+    #st-container
+      nav.navbar.navbar-index
+        #st-trigger-effects.column
+          button.menu-trigger.btn-lg(type='button', show-menu='click')
+            span.glyphicon.glyphicon-th
+        .container
+          .navbar-header
+          #navbar.collapse.navbar-collapse
+            ul.nav.navbar-nav
+              li.active
+                .navbar-brand(href='#') {{menu.header}}
+      menu-slide
+    contenedor
+  script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js')
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+  script(src='https://getbootstrap.com/dist/js/bootstrap.min.js')
+  script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
+  script(src='node_modules/angular-chart.js/node_modules/chart.js/dist/Chart.min.js')
+  script(src='node_modules/angular-chart.js/dist/angular-chart.min.js')
+  script(type='text/javascript', src='js/app.js')
+  script(type='text/javascript', src='js/menuModule.js')
+  script(type='text/javascript', src='js/dashboardModule.js')
+  script(type='text/javascript', src='js/monitorModule.js')
+  script(type='text/javascript', src='js/menuSlide.js')

@@ -1,0 +1,40 @@
+.panel-monitor>.panel-heading {
+    color: #000;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+.panel-monitor {
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 3px 4px 17px -6px rgba(0,0,0,0.42);
+    box-shadow: 3px 4px 17px -6px rgba(0,0,0,0.42);
+     background-color: #489AA7;
+    background-color: #fff;
+     border-color: #ddd;
+}
+.grup-button-right {
+float: right;
+margin-top: 2px;
+margin-right: -6px;
+}
+
+
+.grup-menu-colum {
+background: 0 0;
+border: 0;
+}
+
+.unit-measure{
+    float: right;
+    font-weight: 900;
+}
+
+
+.li-monitor{
+overflow: hidden;
+margin-top: 3px;
+padding-bottom: 15px;
+border-bottom: 1px solid #e7eaec;
+}

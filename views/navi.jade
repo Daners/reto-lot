@@ -1,0 +1,14 @@
+#st-container(ng-controller='menuController as menu')
+  nav.navbar.navbar-index
+    #st-trigger-effects.column
+      button.menu-trigger.btn-lg(type='button', show-menu='click')
+        span.glyphicon.glyphicon-th
+    .container
+      .navbar-header
+      #navbar.collapse.navbar-collapse
+        ul.nav.navbar-nav
+          li.active
+            .navbar-brand(href='#') {{menu.header}}
+      // /.nav-collapse
+  .overlay(toggle-menu='click')
+  menu-slide

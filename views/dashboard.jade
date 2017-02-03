@@ -1,0 +1,18 @@
+.col-lg-6.col-md-4.col-sm-4.col-xs-5.inline(ng-controller='BarCtrl as barctr')
+  .card.panel-monitor
+    .panel-heading
+      .btn-group.grup-button-right(role='group')
+        button.grup-menu-colum.btn-ms(type='button')
+          span.glyphicon.glyphicon-tasks(aria-hidden='true')
+      .btn-group(role='group')
+        h2.panel-title(buttons='no') {{dispositivo.Dispositivo}} 
+      span.label(ng-class="[getClass(), 'b']") {{dispositivo.status}}
+    .panel-body
+      .li-monitor
+        small Sensor: {{dispositivo.Sensor}}
+        .unit-measure.font-bold.text-success
+          | {{dispositivo.Unidad}} 
+          i.fa.fa-bolt
+        canvas#bar.chart.chart-bar(width='210', height='60', chart-data='tempChart.data', chart-labels='tempChart.labels', chart-options='tempChart.options', chart-dataset-override='tempChart.datasetOverride', chart-colors='tempChart.colors')
+          | chart-series="series"
+       
