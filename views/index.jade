@@ -2,6 +2,9 @@ html(lang='en', ng-app='controlpanel')
   head
     title  ControlPanelJS
     style.anchorjs.
+    meta(name='HandheldFriendly', content='true')
+    meta(name='viewport', content='width=device-width, initial-scale=0.666667, maximum-scale=0.666667, user-scalable=0')
+    meta(name='viewport', content='width=device-width')
     link(href='https://getbootstrap.com/dist/css/bootstrap.min.css', rel='stylesheet')
     link#bs-theme-stylesheet(href='data:text/css;charset=utf-8,', data-href='https://getbootstrap.com//dist/css/bootstrap-theme.min.css', rel='stylesheet')
     link(href='https://getbootstrap.com/assets/css/docs.min.css', rel='stylesheet')
@@ -20,9 +23,15 @@ html(lang='en', ng-app='controlpanel')
           #navbar.collapse.navbar-collapse
             ul.nav.navbar-nav
               li.active
-                .navbar-brand(href='#') {{menu.header}}
+                .navbar-brand(href='#') 
+            ul.nav.navbar-nav.navbar-right.hidden-xs.hidden-md
+              li 
+                button.btn.btn-default.navbar-btn#consolebtn(data-toggle="button") Consola
       menu-slide
     contenedor
+    footer#console.console(ng-controller='BarCtrl as barctr')
+      div(ng-repeat="c in consola track by $index") 
+       li {{c}}
   script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js')
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
   script(src='https://getbootstrap.com/dist/js/bootstrap.min.js')
@@ -34,3 +43,6 @@ html(lang='en', ng-app='controlpanel')
   script(type='text/javascript', src='js/dashboardModule.js')
   script(type='text/javascript', src='js/monitorModule.js')
   script(type='text/javascript', src='js/menuSlide.js')
+  script(type='text/javascript', src='js/pie-chart.min.js')
+  script(type='text/javascript', src='js/d3.min.js')
+  script(src='https://cdn.socket.io/socket.io-1.4.5.js')

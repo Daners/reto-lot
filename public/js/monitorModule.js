@@ -1,81 +1,33 @@
 (function() {
-    var currentX = null;
-    var currentY = null;
-    var customTooltips = function(tooltip) {
 
-        var helpers = Chart.helpers;
-        var ctx = this._chart.ctx;
-        var vm = this._view;
-
-        if (vm == null || ctx == null || helpers == null || vm.opacity === 0) {
-            return;
-        }
-
-        var tooltipSize = this.getTooltipSize(vm);
-
-        var pt = {
-            x: vm.x,
-            y: vm.y
-        };
-
-        if (currentX == vm.x && currentY == vm.y) {
-            return;
-        }
-
-        currentX = vm.x;
-        currentY = vm.y;
-
-        //  IE11/Edge does not like very small opacities, so snap to 0
-        var opacity = Math.abs(vm.opacity < 1e-3) ? 0 : vm.opacity;
-
-        // Draw Background
-        var bgColor = helpers.color(vm.backgroundColor);
-        ctx.fillStyle = bgColor.alpha(opacity * bgColor.alpha()).rgbString();
-        helpers.drawRoundedRectangle(ctx, pt.x, pt.y, tooltipSize.width, tooltipSize.height, vm.cornerRadius);
-        ctx.fill();
-
-        // Draw Caret
-        this.drawCaret(pt, tooltipSize, opacity);
-
-        // Draw Title, Body, and Footer
-        pt.x += vm.xPadding;
-        pt.y += vm.yPadding;
-
-        // Titles
-        this.drawTitle(pt, vm, ctx, opacity);
-
-        // Body
-        this.drawBody(pt, vm, ctx, opacity);
-
-        // Footer
-        this.drawFooter(pt, vm, ctx, opacity);
-    };
+    var ioConnect = function() {
+        return io.connect();
+    }
 
 
-    var scaleSettings = {
-        startValue: -50,
-        endValue: 50,
-        majorTick: {
-            color: 'black',
-            tickInterval: 10
-        },
-        minorTick: {
-            visible: true,
-            color: 'black',
-            tickInterval: 1
-        }
-    };
-
-    var app = angular.module('monitor-module', ["chart.js"]);
+    var app = angular.module('monitor-module', ["chart.js", 'n3-pie-chart']);
 
 
     app.controller('BarCtrl', ['$scope', '$interval', '$http', function($scope, $interval, $http) {
 
+        var socket = ioConnect();
         $scope.tempChart = {};
         $scope.dispositivo = {}
+        $scope.consola = [];
 
-      
+        $scope.data = [{
+            label: "-",
+            value: 0,
+            suffix: "-",
+            color: "steelblue"
+        }];
 
+
+        $scope.options = {
+            thickness: 10,
+            mode: "gauge",
+            total: 80
+        };
 
 
         $scope.tempChart.options = {
@@ -105,75 +57,102 @@
 
             }
         };
-var coutn =0;
 
-    
+
+
 
         $scope.tempChart.colors = ['#45b7cd', '#38648A'];
-        $scope.tempChart.labels = ['-', '-', '-', '-', '-'];
-       // $scope.tempChart.series = [$scope.dispositivo.Unidad];
+        $scope.tempChart.labels = ['-', '-', '-', '-', '-', '-', '-', '-'];
+        // $scope.tempChart.series = [$scope.dispositivo.Unidad];
         $scope.tempChart.data = [
             [0]
         ];
 
-    
+        socket.on('connect', function() {
+            $scope.status = "Conectado";
+            console.log($scope.status);
+            $scope.$apply();
+        });
 
-$interval(function() {
-  $http.get("/dispositivos").success(function(data) {
-            var dis = data[0];
+        var count = new Date();
+        var sec = count.getSeconds();
+        var min = count.getMinutes();
+
+        socket.on('message', function(msg) {
+            var dis = msg;
             var nombre = dis.Dispositivo;
-           if(dis){
-                
-                    $scope.dispositivo = data[0];
-            
-                
-        $scope.tempChart.datasetOverride = [{
-            label: $scope.dispositivo.Unidad,
-            tension: 0.2,
-            type: 'line',
+            console.log(msg);
+            // $scope.consola.push(new Date());
+            var d = new Date();
+            var n = d.toISOString();
+            $scope.consola.push(n + ": " + JSON.stringify(msg));
+            if (dis) {
 
-            fill: true,
-            pointBorderColor: "rgba(75,192,192,1)",
-            pointBackgroundColor: "rgba(75,192,192,1)",
-            pointBorderWidth: 1,
-            pointHoverRadius: 3,
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-            pointHoverBorderColor: "rgba(220,220,220,1)",
-            pointHoverBorderWidth: 1,
-            pointRadius: 2,
-            pointHitRadius: 10
+                $scope.dispositivo = msg;
 
 
-        }];
-        
-       
-        coutn = coutn +1;
-           $scope.tempChart.data[0].push($scope.dispositivo.Valor);
-            $scope.tempChart.labels.push(coutn);
+                $scope.tempChart.datasetOverride = [{
+                    label: $scope.dispositivo.Unidad,
+                    tension: 0.2,
+                    type: 'line',
+
+                    fill: true,
+                    pointBorderColor: "rgba(75,192,192,1)",
+                    pointBackgroundColor: "rgba(75,192,192,1)",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 2,
+                    pointHitRadius: 10
+
+
+                }];
+
+                var dat = new Date();
+                var secda = dat.getSeconds() - sec;
+                var minda = dat.getMinutes() - min;
+
+                $scope.tempChart.data[0].push($scope.dispositivo.Valor);
+                $scope.tempChart.labels.push(minda + ":" + secda);
                 if ($scope.tempChart.data[0].length > 9) {
                     $scope.tempChart.data[0].shift();
 
                 }
-                 if ($scope.tempChart.labels.length < 9) {
-                   $scope.tempChart.labels.shift();
+                if ($scope.tempChart.labels.length > 8) {
+                    $scope.tempChart.labels.shift();
                 }
-           }
-         
-            
-        }).error(function(){
-            $scope.dispositivo.status ="Desconectado";
-        });
-       
-}, 1000);
+            }
+            var uniti = $scope.dispositivo.Unidad;
 
-$scope.getClass =  function(){
-    var clss = "label-danger";
-    if(  $scope.dispositivo.status =="Conectado"){
-        clss = "label-success";
-    }
-    return clss
-};
-      
+            $scope.data = [{
+                label: $scope.dispositivo.Sensor,
+                value: $scope.dispositivo.Valor,
+                suffix: uniti.substring(0, 3),
+                color: "steelblue"
+            }];
+
+
+            $scope.options = {
+                thickness: 10,
+                mode: "gauge",
+                total: 1000
+            };
+            $scope.$apply();
+
+        });
+
+
+
+        $scope.getClass = function() {
+            var clss = "label-danger";
+            if ($scope.status == "Conectado") {
+                clss = "label-success";
+            }
+            return clss
+        };
+
 
 
 

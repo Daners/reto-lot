@@ -3,6 +3,11 @@
 
 (function() {
 
+$("#console").hide();
+$("#consolebtn").click(function(){
+    
+    $("#console").toggle(); 
+})
 
     var app = angular.module('controlpanel', ['menu-module','dashboard-module','monitor-module']);
 

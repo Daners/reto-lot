@@ -38,3 +38,34 @@ margin-top: 3px;
 padding-bottom: 15px;
 border-bottom: 1px solid #e7eaec;
 }
+
+.Console{
+    
+height: 200px;
+color: white;
+padding-left: 50px;
+overflow: scroll;
+background-color: rgb(21, 54, 73);
+position: absolute;
+left: 0px;
+right: 0px;
+bottom: 0px;
+}
+/*
+@media (max-width: 480px) {
+ body { font-size: 3em; }
+
+}
+
+
+ Portrait tablets and small desktops 
+@media (min-width: 768px) and (max-width: 991px) {
+ body { font-size: 3em; }
+
+}
+
+
+@media (max-width: 767px) {
+ body { font-size: 3em; }
+
+}*/
