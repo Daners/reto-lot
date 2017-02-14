@@ -1,0 +1,20 @@
+doctype html
+html( ng-app='controlpanel')
+  head
+    title  ControlPanelJS
+    link(href='/ng-material/mfb/dist/mfb.css', rel='stylesheet')
+    link(href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css', rel='stylesheet')
+    
+   
+    
+  body
+    nav(mfb-menu='', position='br', effect='zoomin', label='hover here', active-icon='ion-edit', resting-icon='ion-plus-round', toggling-method='click')
+      button(mfb-button='', icon='paper-airplane', label='menu item')
+  
+  script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js')
+ 
+  script(src='/ng-material/src/mfb-directive.js')
+  script.
+      (function() {
+      var app = angular.module('controlpanel', ['ng-mfb']);
+      })();

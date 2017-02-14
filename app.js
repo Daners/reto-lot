@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 
 var controlpanel = require('./routes/controlpanel');
 var templates = require('./routes/templates');
+var mqtt = require('./routes/mqttConection');
+var disp = require('./routes/dispositivosRuter');
 
 var app = express();
 
@@ -25,10 +27,23 @@ app.use(logger('dev'));
 
 
 app.use(cookieParser());
+console.log(__dirname );
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
+app.use('/chartjs', express.static(__dirname + '/node_modules/chart.js/dist'));
+app.use('/angular-chartjs', express.static(__dirname + '/node_modules/angular-chart.js/dist'));
+
+app.use('/chartjs', express.static(__dirname + '/node_modules/chart.js/dist'));
+app.use('/angular-route', express.static(__dirname + '/node_modules/angular-route'));
+
+app.use('/ng-material', express.static(__dirname + '/node_modules/ng-material-floating-button'));
+app.use('/jspath', express.static(__dirname + '/node_modules/jspath/lib'));
+
 
 app.use('/', controlpanel);
 app.use('/templates', templates);
+app.use('/mqtt', mqtt);
+app.use('/devices', disp);
 
 
 // catch 404 and forward to error handler

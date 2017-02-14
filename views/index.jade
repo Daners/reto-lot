@@ -1,3 +1,4 @@
+doctype html
 html(lang='en', ng-app='controlpanel')
   head
     title  ControlPanelJS
@@ -8,41 +9,57 @@ html(lang='en', ng-app='controlpanel')
     link(href='https://getbootstrap.com/dist/css/bootstrap.min.css', rel='stylesheet')
     link#bs-theme-stylesheet(href='data:text/css;charset=utf-8,', data-href='https://getbootstrap.com//dist/css/bootstrap-theme.min.css', rel='stylesheet')
     link(href='https://getbootstrap.com/assets/css/docs.min.css', rel='stylesheet')
+    link(href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css', rel='stylesheet')
+    
+    link(href='/ng-material/mfb/dist/mfb.css', rel='stylesheet')
     link(href='stylesheets/menuslide.css', rel='stylesheet')
-    //
-      if lt IE 9script(src='http://getbootstrap.com/assets/js/ie8-responsive-file-warning.js')
-      http://webapplayers.com/inspinia_admin-v2.6.2.1/Angular/#/dashboards/dashboard_1
+    link(href='stylesheets/dashboard.css', rel='stylesheet')
+ 
   body.cbp-spmenu-push(style='background-color: #f3f3f4;')
+    
     #st-container
-      nav.navbar.navbar-index
+      nav.navbar.navbar-index.navbar-inverse
         #st-trigger-effects.column
           button.menu-trigger.btn-lg(type='button', show-menu='click')
             span.glyphicon.glyphicon-th
         .container
           .navbar-header
+           
           #navbar.collapse.navbar-collapse
-            ul.nav.navbar-nav
-              li.active
-                .navbar-brand(href='#') 
-            ul.nav.navbar-nav.navbar-right.hidden-xs.hidden-md
-              li 
-                button.btn.btn-default.navbar-btn#consolebtn(data-toggle="button") Consola
+            ul.nav.navbar-nav.navbar-right
+             
       menu-slide
-    contenedor
+    .container
+      .row
+        div(ng-view='')
+
+
     footer#console.console(ng-controller='BarCtrl as barctr')
       div(ng-repeat="c in consola track by $index") 
        li {{c}}
+    nav(mfb-menu='', position='br', effect='zoomin', label='hover here', active-icon='ion-edit', resting-icon='ion-plus-round', toggling-method='click')
+          //button(mfb-button='', icon='ion-levels', label='Dashboard',  mfb-button-close)
+          //button(mfb-button='', icon='ion-usb', label='Dispositivo',  mfb-button-close)
+          button(mfb-button='', icon='ion-speedometer', label='Widget', mfb-button-close)
   script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js')
+  script(src='/angular-route/angular-route.js')
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
   script(src='https://getbootstrap.com/dist/js/bootstrap.min.js')
   script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
-  script(src='node_modules/angular-chart.js/node_modules/chart.js/dist/Chart.min.js')
-  script(src='node_modules/angular-chart.js/dist/angular-chart.min.js')
+  script(src='/chartjs/Chart.min.js')
+  script(src='/angular-chartjs/angular-chart.min.js')
+  script(src='/ng-material/src/mfb-directive.js')
   script(type='text/javascript', src='js/app.js')
   script(type='text/javascript', src='js/menuModule.js')
   script(type='text/javascript', src='js/dashboardModule.js')
   script(type='text/javascript', src='js/monitorModule.js')
+  script(type='text/javascript', src='js/dispositivosModule.js')
   script(type='text/javascript', src='js/menuSlide.js')
+  script(type='text/javascript', src='js/ConfigModule.js')
   script(type='text/javascript', src='js/pie-chart.min.js')
   script(type='text/javascript', src='js/d3.min.js')
+  script(type='text/javascript', src='/jspath/jspath.js')
   script(src='https://cdn.socket.io/socket.io-1.4.5.js')
+  script(src="/bower_components/moment/min/moment.min.js")
+  script(src="/bower_components/humanize-duration/humanize-duration.js")
+  script(src="/bower_components/angular-timer/dist/angular-timer.min.js")

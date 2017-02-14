@@ -39,7 +39,7 @@ app.controller('menuController',['$scope','$http', function($scope,$http) {
     app.directive('menuSlide', function() {
         return {
             restrict: 'E',
-            templateUrl: '/templates/menu-slideTemplate'
+            templateUrl: '/templates/menu-slide'
         };
     });
 

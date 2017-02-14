@@ -1,6 +1,9 @@
 //var nodemailer = require('nodemailer');
 const nodemailer = require('nodemailer');
 
+var valueAlert="";
+var emailsTo="";
+
 var transport = nodemailer.createTransport( {
   service:"Gmail",
     auth: {
@@ -14,8 +17,7 @@ var transport = nodemailer.createTransport( {
 
 module.exports.sendEmail = function(device) {
 
-    if (device.Valor >= 1000) {
-        console.log("ALERTA HOT");
+    
         var text = "ALERTA!!\n\n" +
             "Dispositivo: " + device.Dispositivo + "\n" +
             "Sensor: " + device.Sensor + "\n" +
@@ -38,6 +40,15 @@ module.exports.sendEmail = function(device) {
 
             };
         });
-    }
+    
+    
+module.exports.setValueAlert = function(val){
+    valueAlert = val;
+}    
+
+module.exports.setEmailsTo = function(emails){
+    emailsTo = emails;
+}    
+    
 
 }

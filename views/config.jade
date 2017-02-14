@@ -1,0 +1,47 @@
+.row(ng-controller = 'mqttController as mqttCtrl')
+  .col-lg-12.col-md-12.col-sm-12.col-xs-12.panel-monitor.panel-heading
+    ul#myTabs.nav.nav-tabs(role='tablist')
+      li.active(role='presentation')
+        a#mqtt-tab(href='#mqtt', role='tab', data-toggle='tab', aria-controls='mqtt', aria-expanded='true') MQTT Configuracion
+    
+    .container-fluid
+      #myTabContent.tab-content
+        #mqtt.tab-pane.fade.active.in(style='    padding-top: 15px;', role='tabpanel', aria-labelledby='home-tab')
+          form.form-horizontal
+            .form-group
+              label.col-sm-2.control-label(for='mqtt') MQTT://
+              .col-sm-10
+                input#mqtt.form-control(type='url', placeholder='Ej. broker.mqtt.com',ng-model="mqtt.url", ng-model-options="{ getterSetter: true }")
+            .form-group
+              label.col-sm-2.control-label(for='port') PORT
+              .col-sm-10
+                input#port.form-control(type='text', placeholder='Ej. 8000',ng-model="mqtt.port", ng-model-options="{ getterSetter: true }")
+            .form-group
+              label.col-sm-2.control-label(for='user') User
+              .col-sm-10
+                input#user.form-control(type='text', placeholder='Ej. Username',ng-model="mqtt.username", ng-model-options="{ getterSetter: true }")
+            .form-group
+              label.col-sm-2.control-label(for='pass') Password
+              .col-sm-10
+                input#pass.form-control(type='password', placeholder='Ej. *******',ng-model="mqtt.password", ng-model-options="{ getterSetter: true }")
+            
+    
+            button.btn.btn-primary(type='button',ng-click='conectar($event)') Conectar
+  .col-lg-12.col-md-12.col-sm-12.col-xs-12.panel-monitor.panel-heading
+    ul#myTabs.nav.nav-tabs(role='tablist')
+      li.active(role='presentation')
+        a#topic-tab(href='#mqtt', role='tab', data-toggle='tab', aria-controls='topic', aria-expanded='true') Topic
+    
+    .container-fluid
+      #myTabContent.tab-content
+        #topic.tab-pane.fade.active.in(style='    padding-top: 15px;', role='tabpanel', aria-labelledby='htopic-tab')
+          form.form-horizontal
+            
+            .form-group
+              label.col-sm-2.control-label(for='topic') Topic
+              .col-sm-10
+                input#topic.form-control(type='text', ng-model="mqtt.topic", ng-model-options="{ getterSetter: true }", placeholder='all/#')
+    
+            button.btn.btn-primary(type='button' ng-click='subscribe($event)') Subscribir
+            
+            

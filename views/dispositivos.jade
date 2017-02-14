@@ -1,0 +1,64 @@
+.row(ng-controller="dispositivoController as disCtrl" ng-init="getDevices()")
+  .col-lg-3.col-md-3.col-sm-12.col-xs-12(ng-repeat="dis in dispositivos")
+    .card.panel-monitor
+      .panel-heading
+        .btn-group.grup-button-right(role='group')
+          button.grup-menu-colum.btn-ms(type='button',data-toggle="modal",ng-click="llenarDeviceModal(dis)",data-target="#dsipModal")
+            span.glyphicon.glyphicon-tasks(aria-hidden='true')
+        .btn-group(role='group')
+          h2.panel-title(buttons='no') {{dis.Dispositivo}}
+            small   {{dis.Lugar}}
+        pan.label(class="label label-success",style="margin-left: 10px;") {{dis.status}}
+      .panel-body
+        
+        .li-monitor(ng-repeat="sensor in dis.sensores")
+          small
+            timer(interval="1000",start-time="sensor.data[0].date") {{hhours}}:{{mminutes}}:{{sseconds}}
+         
+          .unit-measure.font-bold.text-success
+            | Sensor: {{sensor.nombre}}
+            i.fa.fa-bolt
+          h1.text-center {{sensor.data[0].valor}} 
+            small {{sensor.unidad}}
+            
+  #dsipModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel' )
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+          h4#myModalLabel.modal-title {{deviceModel.Dispositivo}}
+        .modal-body
+          ul#myTabs.nav.nav-tabs(role='tablist')
+            li.active(role='presentation')
+              a#alert-tab(href='#alerts', role='tab', data-toggle='tab', aria-controls='alerts', aria-expanded='true') Alerts
+          .container-fluid
+              #alerts.tab-pane.fade.active.in(role='tabpanel', style='    padding-top: 15px;', aria-labelledby='profile-tab')
+               ul.list-group
+                li.list-group-item
+                   form.form-inline
+                    .form-group
+                      label.sr-only(for='exampleInputEmail3') Email 
+                      input#exampleInputEmail3.form-control(type='email', placeholder='Email')
+                    .form-group
+                      label.sr-only(for='exampleInputPassword3') Valor
+                      input#exampleInputPassword3.form-control(type='text', placeholder='Valor Alerta')
+                   
+                    button.btn.btn-success(type='button' ng-click="toggleAlert($event)") Activada
+                 li.list-group-item   
+                   form.form-inline
+                    .form-group
+                      label.sr-only(for='exampleInputEmail3') Email address
+                      input#exampleInputEmail3.form-control(type='email', placeholder='Email')
+                    .form-group
+                      label.sr-only(for='exampleInputPassword3') Valor
+                      input#exampleInputPassword3.form-control(type='password', placeholder='Valor Alerta')
+                   
+                    button.btn.btn-success(type='button',ng-click="toggleAlert($event)") Activada
+               
+               
+        .modal-footer
+          button.btn.btn-default(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary(type='button') Agregar
+    
+ 

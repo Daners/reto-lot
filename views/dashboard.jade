@@ -19,7 +19,7 @@
                pie-chart(data='data', options='options' )
           .col-lg-8
             canvas#bar.chart.chart-bar(height='80', chart-data='tempChart.data', chart-labels='tempChart.labels', chart-options='tempChart.options', chart-dataset-override='tempChart.datasetOverride', chart-colors='tempChart.colors') chart-series="series"
-#myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+#myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel',ng-controller='alertController as alCtrl')
   .modal-dialog(role='document')
     .modal-content
       .modal-header
@@ -29,38 +29,13 @@
       .modal-body
         ul#myTabs.nav.nav-tabs(role='tablist')
           li.active(role='presentation')
-            a#home-tab(href='#home', role='tab', data-toggle='tab', aria-controls='home', aria-expanded='true') Configuracion
-          li(role='presentation')
-            a#profile-tab(href='#profile', role='tab', data-toggle='tab', aria-controls='profile', aria-expanded='false') Alertas
+            a#alert-tab(href='#alerts', role='tab', data-toggle='tab', aria-controls='alerts', aria-expanded='true') Alerts
         .container-fluid
-          #myTabContent.tab-content
-            #home.tab-pane.fade.active.in(style='    padding-top: 15px;', role='tabpanel', aria-labelledby='home-tab')
-              form.form-horizontal
-                .form-group
-                  label.col-sm-2.control-label(for='mqtt') MQTT://
-                  .col-sm-10
-                    input#mqtt.form-control(type='url', placeholder='broker.mqtt.com')
-                .form-group
-                  label.col-sm-2.control-label(for='port') PORT
-                  .col-sm-10
-                    input#port.form-control(type='text', placeholder='8000')
-                .form-group
-                  label.col-sm-2.control-label(for='user') User
-                  .col-sm-10
-                    input#user.form-control(type='text', placeholder='username')
-                .form-group
-                  label.col-sm-2.control-label(for='pass') Password
-                  .col-sm-10
-                    input#pass.form-control(type='text', placeholder='*******')
-                .form-group
-                  label.col-sm-2.control-label(for='topic') Topic
-                  .col-sm-10
-                    input#topic.form-control(type='password', placeholder='all/#')
-            #profile.tab-pane.fade(role='tabpanel', style='    padding-top: 15px;', aria-labelledby='profile-tab')
+            #alerts.tab-pane.fade.active.in(role='tabpanel', style='    padding-top: 15px;', aria-labelledby='profile-tab')
               form.form-horizontal
                 .form-group
                   .col-sm-offset-2.col-sm-10
-                    button.btn.btn-success(type='button') Activada
+                    #alertbtn.button.btn.btn-success(type='button',ng-click="toggleAlert($event)") Activada
                 .form-group
                   label.col-sm-2.control-label(for='val') Alerta Value
                   .col-sm-10
@@ -69,6 +44,50 @@
                   label.col-sm-2.control-label(for='correo') Correo
                   .col-sm-10
                     input#correo.form-control(type='email', placeholder='mail@nodemailer.com')
+      .modal-footer
+        button.btn.btn-default(type='button', data-dismiss='modal') Close
+        button.btn.btn-primary(type='button') Save changes
+        
+#modalWidget.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') ×
+        h4#myModalLabel.modal-title Widget
+      .modal-body
+        ul#myTabs.nav.nav-tabs(role='tablist')
+          li.active(role='presentation')
+            a#widget-tab(href='#widgets', role='tab', data-toggle='tab', aria-controls='alerts', aria-expanded='true') New Widget
+        .container-fluid
+            #widgets.tab-pane.fade.active.in(role='tabpanel', style='    padding-top: 15px;', aria-labelledby='widget-tab')
+              form.form-horizontal
+                .form-group
+                  .col-sm-offset-2.col-sm-10
+                    .checkbox
+                      label
+                        input(type='checkbox')
+                        |  JSON Path
+                .form-group
+                  label.col-sm-2.control-label(for='value') Valor
+                  .col-sm-10
+                    input#correo.form-control(type='text', placeholder='$.Valor')
+                .form-group
+                  label.col-sm-2.control-label(for='value') Nombre
+                  .col-sm-10
+                    input#correo.form-control(type='text', placeholder='$.dispositivo')
+                .form-group
+                  label.col-sm-2.control-label(for='value') Unidad
+                  .col-sm-10
+                    input#correo.form-control(type='text', placeholder='$.unidad')
+                .form-group
+                  label.col-sm-2.control-label(for='value') Sensor
+                  .col-sm-10
+                    input#correo.form-control(type='text', placeholder='$.sensor')
+                .form-group
+                  label.col-sm-2.control-label(for='value') Lugar
+                  .col-sm-10
+                    input#correo.form-control(type='text', placeholder='$.Lugar')
       .modal-footer
         button.btn.btn-default(type='button', data-dismiss='modal') Close
         button.btn.btn-primary(type='button') Save changes

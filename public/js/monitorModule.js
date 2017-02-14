@@ -1,16 +1,14 @@
 (function() {
 
-    var ioConnect = function() {
-        return io.connect();
-    }
+  
 
 
     var app = angular.module('monitor-module', ["chart.js", 'n3-pie-chart']);
 
 
-    app.controller('BarCtrl', ['$scope', '$interval', '$http', function($scope, $interval, $http) {
+    app.controller('BarCtrl', ['$scope', '$interval', '$http','socket', function($scope, $interval, $http,socket) {
 
-        var socket = ioConnect();
+      
         $scope.tempChart = {};
         $scope.dispositivo = {}
         $scope.consola = [];
@@ -62,7 +60,7 @@
 
 
         $scope.tempChart.colors = ['#45b7cd', '#38648A'];
-        $scope.tempChart.labels = ['-', '-', '-', '-', '-', '-', '-', '-'];
+        $scope.tempChart.labels = ['-', '-', '-', '-', '-', '-', '-', '-','-', '-', '-', '-', '-', '-', '-', '-'];
         // $scope.tempChart.series = [$scope.dispositivo.Unidad];
         $scope.tempChart.data = [
             [0]
@@ -78,10 +76,9 @@
         var sec = count.getSeconds();
         var min = count.getMinutes();
 
-        socket.on('message', function(msg) {
+     /*   socket.on('message', function(msg) {
             var dis = msg;
             var nombre = dis.Dispositivo;
-            console.log(msg);
             // $scope.consola.push(new Date());
             var d = new Date();
             var n = d.toISOString();
@@ -116,11 +113,11 @@
 
                 $scope.tempChart.data[0].push($scope.dispositivo.Valor);
                 $scope.tempChart.labels.push(minda + ":" + secda);
-                if ($scope.tempChart.data[0].length > 9) {
+                if ($scope.tempChart.data[0].length > 16) {
                     $scope.tempChart.data[0].shift();
 
                 }
-                if ($scope.tempChart.labels.length > 8) {
+                if ($scope.tempChart.labels.length > 16) {
                     $scope.tempChart.labels.shift();
                 }
             }
@@ -141,7 +138,7 @@
             };
             $scope.$apply();
 
-        });
+        });*/
 
 
 
