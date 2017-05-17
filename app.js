@@ -35,6 +35,15 @@ app.use('/angular-chartjs', express.static(__dirname + '/node_modules/angular-ch
 
 app.use('/chartjs', express.static(__dirname + '/node_modules/chart.js/dist'));
 app.use('/angular-route', express.static(__dirname + '/node_modules/angular-route'));
+app.use('/angularjs-dragula', express.static(__dirname + '/node_modules/angularjs-dragula'));
+app.use('/d3', express.static(__dirname + '/node_modules/d3/build'));
+app.use('/angular-nvd3', express.static(__dirname + '/node_modules/angular-nvd3/dist'));
+app.use('/nvd3', express.static(__dirname + '/node_modules/angular-nvd3/node_modules/nvd3/build'));
+app.use('/math', express.static(__dirname + '/node_modules/mathjs/dist'));
+app.use('/socket', express.static(__dirname + '/node_modules/socket.io-client/dist'));
+
+
+
 
 app.use('/ng-material', express.static(__dirname + '/node_modules/ng-material-floating-button'));
 app.use('/jspath', express.static(__dirname + '/node_modules/jspath/lib'));

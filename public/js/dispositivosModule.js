@@ -2,16 +2,34 @@
 
 
 
-    var app = angular.module('dispositivos-module', []);
+    var app = angular.module('dispositivos-module', [angularDragula(angular)]);
 
 
-    app.controller('dispositivoController', ['$scope', "socket", '$http', function($scope, socket, $http) {
+    app.controller('dispositivoController', ['$scope', "socket", '$http', 'dragulaService', "$interval", function($scope, socket, $http, dragulaService, $interval) {
 
+        dragulaService.options($scope, 'device-bag', {
+            moves: function(el, container, handle) {
+                var hand = handle.className;
+
+                var isHandle = (hand === 'panel-title ng-binding' || hand === 'panel-heading');
+                return isHandle;
+            }
+        });
 
         $scope.deviceModel = {};
         $scope.dispositivos = [];
+
+      
+
+
+
+
+
+
+
+
         var dispEjm = {
-            Dispositivo: "ARDUINO",
+            Dispositivo: "ARD3",
             Lugar: "EKT",
             status: "Activo",
             sensores: [{
@@ -39,12 +57,46 @@
 
         });
 
+
+
+        $interval(function() {
+
+            chackMessage();
+
+
+        }, 60000);
+
         socket.on('message', function(msg) {
 
             parseMessage(msg);
         });
 
 
+        var chackMessage = function() {
+            var d = Date.now();
+            for (i = 0; i < $scope.dispositivos.length; i++) {
+                var device = $scope.dispositivos[i];
+                var sensores = device.sensores;
+                for (j = 0; j < sensores.length; j++) {
+                    var data = sensores[j].data;
+                    //  for (k = 0; k < data.length; k++) {
+                    //  if(data.date!=d){
+
+                    // device.status = "Inactivo"; 
+                    console.log(data[0].date);
+
+                    var dateDevice = new Date(data[0].date);
+                    if (dateDevice < d) {
+                        device.status = "Inactivo";
+                    }
+                    //}
+                    //}
+
+
+                    //$scope.$apply();
+                }
+            }
+        }
 
         var parseMessage = function(message) {
 
@@ -56,13 +108,12 @@
 
             if (device.length > 0) {
 
-                console.log(device);
+
                 llenarDevice(device, message)
                 $scope.$apply();
             }
             else {
                 var newDev = {};
-                console.log(message);
                 newDev.Dispositivo = message.Dispositivo;
                 newDev.Lugar = message.Lugar;
                 newDev.status = "Activo";
@@ -74,7 +125,7 @@
             }
 
 
-            console.log($scope.dispositivos);
+
 
         }
 
@@ -91,21 +142,34 @@
                 llenarSensor(device.sensores, message.sensores[0]);
 
                 device.status = "Activo";
-                $scope.$apply();
+
             }
+
+            $scope.$apply();
 
         }
 
         var llenarSensor = function(sensores, messageSensor) {
 
-            for (i = 0; i < sensores.length; i++) {
-                console.log(sensores[i].nombre + " " + messageSensor.nombre)
-                if (sensores[i].nombre == messageSensor.nombre) {
-                    sensores[i].data = messageSensor.data;
-                    sensores[i].unidad = messageSensor.unidad;
+            var sensPth = JSPath.apply('.{.nombre =="' + messageSensor.nombre + '" }', sensores);
+
+            if (sensPth.length == 0) {
+                var sens = {};
+                sens.data = messageSensor.data;
+                sens.unidad = messageSensor.unidad;
+                sens.nombre = messageSensor.nombre;
+                sensores.push(sens);
+            }
+            else {
+
+                for (i = 0; i < sensores.length; i++) {
+                    if (sensores[i].nombre == messageSensor.nombre) {
+                        sensores[i].data = messageSensor.data;
+                        sensores[i].unidad = messageSensor.unidad;
+
+                    }
 
                 }
-
             }
         }
 
@@ -142,8 +206,8 @@
             $scope.deviceModel = device;
 
         }
-        
-                $scope.toggleAlert = function($event) {
+
+        $scope.toggleAlert = function($event) {
             var $this = $(event.target);
             $($this).toggleClass('btn-danger').blur();
             if ($this.attr("class").search("btn-danger") >= 0) {

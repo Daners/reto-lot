@@ -9,6 +9,7 @@
 
 
 
+
     var app = angular.module('controlpanel', ['ngRoute', 'menu-module', 'dashboard-module', 'monitor-module','configure-module','ng-mfb',"dispositivos-module","timer"]);
 
 
@@ -22,6 +23,9 @@
             // Is there a way to load /experiment/managementController.js here?
         }).when("/dispositivos", {
             templateUrl: "/templates/dispositivos",
+            // Is there a way to load /experiment/managementController.js here?
+        }).when("/charTest", {
+            templateUrl: "/templates/chart",
             // Is there a way to load /experiment/managementController.js here?
         });
     });

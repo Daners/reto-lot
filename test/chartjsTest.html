@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+
+  <script data-require="jquery" data-semver="3.0.0" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.js"></script>
+  <script data-require="moment.js@2.7.0" data-semver="2.7.0" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+  <script src="../bower_components/chart.js/dist/Chart.min.js"></script>
+  <style type="text/css">
+    .indicator-light.on {
+background-color: rgb(255, 199, 115);
+box-shadow: rgb(255, 153, 0) 0px 0px 15px;
+border-color: rgb(253, 241, 223);
+}
+.indicator-light {
+border-radius: 50%;
+width: 22px;
+height: 22px;
+border: 2px solid rgb(61, 61, 61);
+border-image-source: initial;
+border-image-slice: initial;
+border-image-width: initial;
+border-image-outset: initial;
+border-image-repeat: initial;
+margin-top: 5px;
+float: left;
+background-color: rgb(34, 34, 34);
+margin-right: 10px;
+}
+  </style>
+</head>
+
+
+<body>
+  <div class="indicator-light on ">
+    
+  </div>
+  <script>
+    var numsamples = 60;
+    var AvgCpuChartOptions = {
+      showLines: true,
+      animation: {
+        duration: 1000,
+        easing: 'linear'
+      },
+      responsive: true,
+      title: {
+        display: true,
+        text: 'Average CPU Usage (%)',
+        padding: 5
+      },
+      legend: {
+        display: false,
+        position: 'top',
+        labels: {
+          boxWidth: 10,
+          padding: 2
+        }
+      },
+      tooltips: {
+        enabled: false
+      },
+      scales: {
+        yAxes: [{
+          id: 'cpu',
+          position: 'left',
+          gridLines: {
+            drawTicks: false
+          },
+          ticks: {
+            fontSize: 10,
+            max: 100,
+            min: 0,
+            stepSize: 25,
+            callback: function(value) {
+              return value + '%';
+            }
+          }
+        }],
+        xAxes: [{
+          scaleLabel: {
+            display: true,
+            fontSize: 11,
+            labelString: 'Time'
+          },
+          gridLines: {
+            display: true,
+            drawTicks: false
+          },
+          ticks: {
+            fontSize: 10,
+            maxRotation: 0,
+            autoSkip: false,
+            callback: function(value) {
+              return value.toString().length > 0 ? value : null;
+            },
+          }
+        }]
+      }
+    };
+    var AvgCpuChartData = {
+      labels: [],
+      datasets: [{
+        label: '',
+        yAxisID: 'cpu',
+
+        data: [],
+      }]
+    };
+    for (var i = 0; i < numsamples; i++) {
+      AvgCpuChartData.labels.push('');
+      AvgCpuChartData.datasets[0].data.push(null);
+    }
+    var AvgCpuChart = new Chart($('#bar2'), {
+      type: 'line',
+      data: AvgCpuChartData,
+      options: AvgCpuChartOptions
+    });
+
+    setInterval(function randomdata() {
+      AvgCpuChartData.datasets[0].data.shift();
+      AvgCpuChartData.labels.shift();
+      var ts = new Date();
+      var csecs = moment(ts).format('s');
+      var label = '';
+      if (csecs % 15 === 0) {
+        label = csecs == '0' ? moment(ts).format('HH:mm') : moment(ts).format(':ss');
+      }
+      AvgCpuChartData.datasets[0].data.push(Math.floor((Math.random() * 100) + 1));
+      AvgCpuChartData.labels.push(label);
+      AvgCpuChart.update();
+    }, 1000);
+  </script>
+</body>
+
+</html>

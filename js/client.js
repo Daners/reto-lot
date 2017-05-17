@@ -61,7 +61,7 @@ var device;
 var onMessage = function(message) {
     dispositivo = JSON.parse(message);
     dispositivo.status = "Conectado";
-     console.log(dispositivo);
+    console.log(dispositivo);
     var device = new dispositivos(dispositivo);
     device.save(function(err, device) {
         if (err) return console.error(err);
@@ -84,31 +84,28 @@ exports.initialize = function(server) {
     io = sio(server);
 
     getMqttConfig(function(mqttconf) {
+
         parseMqtt(mqttconf);
+
         client = mqtt.connect(url, options);
         client.on('connect', () => {
-            console.log("conect MQTT");
+            console.log("conect MQTT:" + url + ":" + options.port);
             client.subscribe(topic);
             console.log(topic);
             io.on('connection', function(socket) {
                 console.log(socket.id);
                 console.log("conect");
-                //socket.emit('message', dispositivo);
                 socket.on('message', function(message) {
                     console.log(message);
-
                 });
-
-              
-                
             });
-            
-              client.on('message', (topic, msg) => {
-                         console.log("mensajjjeeje"); 
-                   // onMessage(msg); 
-                  devicesSocket.onmessage(msg,io);
+        });
+        
+        client.on('message', (topic, msg) => {
+            // onMessage(msg); 
+            //console.log(msg);
+            devicesSocket.onmessage(msg, io);
 
-                });
         });
     })
 
@@ -168,7 +165,7 @@ var getMqttConfig = function(callback) {
     }).exec(function(err, mqtt) {
         if (err) console.log(err);
         console.log(mqtt);
-        
+
         callback(mqtt);
     });
 
@@ -218,7 +215,7 @@ exports.getMqtt = function() {
         "port": options.port,
         "username": options.username,
         "password": options.password,
-        "topic":topic
+        "topic": topic
     }
     return mqttServer;
 }

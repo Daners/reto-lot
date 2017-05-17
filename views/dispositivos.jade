@@ -1,25 +1,28 @@
-.row(ng-controller="dispositivoController as disCtrl" ng-init="getDevices()")
-  .col-lg-3.col-md-3.col-sm-12.col-xs-12(ng-repeat="dis in dispositivos")
-    .card.panel-monitor
-      .panel-heading
-        .btn-group.grup-button-right(role='group')
-          button.grup-menu-colum.btn-ms(type='button',data-toggle="modal",ng-click="llenarDeviceModal(dis)",data-target="#dsipModal")
-            span.glyphicon.glyphicon-tasks(aria-hidden='true')
-        .btn-group(role='group')
-          h2.panel-title(buttons='no') {{dis.Dispositivo}}
-            small   {{dis.Lugar}}
-        pan.label(class="label label-success",style="margin-left: 10px;") {{dis.status}}
-      .panel-body
-        
-        .li-monitor(ng-repeat="sensor in dis.sensores")
-          small
-            timer(interval="1000",start-time="sensor.data[0].date") {{hhours}}:{{mminutes}}:{{sseconds}}
+div(ng-controller="dispositivoController as disCtrl" ng-init="getDevices()")
+  .row
+    .col-lg-3.col-md-3.col-sm-4.col-xs-12(ng-repeat="dis in dispositivos")
+      .card.panel-monitor
+        .panel-heading
+          .btn-group.grup-button-right(role='group')
+            button.grup-menu-colum.btn-ms(type='button',data-toggle="modal",ng-click="llenarDeviceModal(dis)",data-target="#dsipModal")
+              span.glyphicon.glyphicon-tasks(aria-hidden='true')
+          .btn-group(role='group')
+            span.indicator-light(ng-class="{'on': dis.status=='Activo'}") 
+          .btn-group(role='group')
+            h2.panel-title(buttons='no') {{dis.Dispositivo}}
+              small   {{dis.Lugar}}
          
-          .unit-measure.font-bold.text-success
-            | Sensor: {{sensor.nombre}}
-            i.fa.fa-bolt
-          h1.text-center {{sensor.data[0].valor}} 
-            small {{sensor.unidad}}
+        .panel-body
+          
+          .li-monitor(ng-repeat="sensor in dis.sensores")
+            small
+              timer(interval="1000",start-time="sensor.data[0].date") {{hhours}}:{{mminutes}}:{{sseconds}}
+           
+            .unit-measure.font-bold.text-success
+              | Sensor: {{sensor.nombre}}
+              i.fa.fa-bolt
+            h1.text-center {{sensor.data[0].valor}} 
+              small {{sensor.unidad}}
             
   #dsipModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel' )
     .modal-dialog(role='document')

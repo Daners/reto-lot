@@ -18,6 +18,10 @@ router.get('/naviTemplate', function(req, res, next) {
 router.get('/configTemplate', function(req, res, next) {
   res.render('config');
 });
+router.get('/chart', function(req, res, next) {
+  res.render('chart');
+});
+
 
 
 // server side route for the partials files

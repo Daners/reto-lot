@@ -1,0 +1,93 @@
+canvas#bar2(weight='30')
+script.
+  var numsamples = 60;
+  var AvgCpuChartOptions = {
+  showLines: true,
+  animation: {
+  duration: 1000,
+  easing: 'linear'
+  },
+  responsive: true,
+  title: {
+  display: true,
+  text: 'Average CPU Usage (%)',
+  padding: 5
+  },
+  legend: {
+  display: false,
+  position: 'top',
+  labels: {
+  boxWidth: 10,
+  padding: 2
+  }
+  },
+  tooltips: {
+  enabled: false
+  },
+  scales: {
+  yAxes: [{
+  id: 'cpu',
+  position: 'left',
+  gridLines: {
+  drawTicks: false
+  },
+  ticks: {
+  fontSize: 10,
+  max: 100,
+  min: 0,
+  stepSize: 25,
+  callback: function(value) {
+  return value + '%';
+  }
+  }
+  }],
+  xAxes: [{
+  scaleLabel: {
+  display: true,
+  fontSize: 11,
+  labelString: 'Time'
+  },
+  gridLines: {
+  display: true,
+  drawTicks: false
+  },
+  ticks: {
+  fontSize: 10,
+  maxRotation: 0,
+  autoSkip: false,
+  callback: function(value) {
+  return value.toString().length > 0 ? value : null;
+  },
+  }
+  }]
+  }
+  };
+  var AvgCpuChartData = {
+  labels: [],
+  datasets: [{
+  label: '',
+  yAxisID: 'cpu',
+  data: [],
+  }]
+  };
+  for (var i = 0; i < numsamples; i++) {
+  AvgCpuChartData.labels.push('');
+  AvgCpuChartData.datasets[0].data.push(null);
+  }
+  var AvgCpuChart = new Chart($('#bar2'), {
+  type: 'line',
+  data: AvgCpuChartData,
+  options: AvgCpuChartOptions
+  });
+  setInterval(function randomdata() {
+  AvgCpuChartData.datasets[0].data.shift();
+  AvgCpuChartData.labels.shift();
+  var ts = new Date().getTime();
+  var csecs = moment(ts).format('s');
+  var label = '';
+  if (csecs % 15 === 0) {
+  label = csecs == '0' ? moment(ts).format('HH:mm') : moment(ts).format(':ss');}
+  AvgCpuChartData.datasets[0].data.push(Math.floor((Math.random() * 100) + 1));
+  AvgCpuChartData.labels.push(label);
+  AvgCpuChart.update();
+  }, 1000);

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html ng-app="plunker">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Angular-nvD3 Line Chart</title>
+    <script>
+        document.write('<base href="' + document.location + '" />');
+    </script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css" />
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js"></script>
+    <script src="https://rawgit.com/krispo/angular-nvd3/v1.0.5/dist/angular-nvd3.js"></script>
+    <script src="app.js"></script>
+</head>
+
+<body ng-controller="MainCtrl">
+
+    <nvd3 options="options" data="data" class="with-3d-shadow with-transitions"></nvd3>
+
+    <br><a href="http://krispo.github.io/angular-nvd3/" target="_blank" style="float: right;">See more</a>
+</body>
+<script type="text/javascript">
+    var app = angular.module('plunker', ['nvd3']);
+
+    app.controller('MainCtrl', function($scope) {
+        $scope.options = {
+            chart: {
+                type: 'lineChart',
+                height: 450,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 40,
+                    left: 55
+                },
+                x: function(d) {
+                    return d.x;
+                },
+                y: function(d) {
+                    return d.y;
+                },
+                xAxis: {
+                    axisLabel: 'Time (ms)'
+                },
+                yAxis: {
+                    axisLabel: 'Voltage (v)',
+                    tickFormat: function(d) {
+                        return d3.format('.02f')(d);
+                    },
+                    axisLabelDistance: -10
+                },
+                useInteractiveGuideline: false,
+                tooltip: {
+                    contentGenerator: function(e) {
+                        var series = e.series[0];
+                        if (series.value === null) return;
+
+                        var rows =
+                            "<tr>" +
+                            "<td class='key'>" + 'Time: ' + "</td>" +
+                            "<td class='x-value'>" + e.value + "</td>" +
+                            "</tr>" +
+                            "<tr>" +
+                            "<td class='key'>" + 'Voltage: ' + "</td>" +
+                            "<td class='x-value'><strong>" + (series.value ? series.value.toFixed(2) : 0) + "</strong></td>" +
+                            "</tr>";
+
+                        var header =
+                            "<thead>" +
+                            "<tr>" +
+                            "<td class='legend-color-guide'><div style='background-color: " + series.color + ";'></div></td>" +
+                            "<td class='key'><strong>" + series.key + "</strong></td>" +
+                            "</tr>" +
+                            "</thead>";
+
+                        return "<table>" +
+                            header +
+                            "<tbody>" +
+                            rows +
+                            "</tbody>" +
+                            "</table>";
+                    }
+                }
+            }
+        };
+
+        $scope.data = sinAndCos();
+
+        /*Random Data Generator */
+        function sinAndCos() {
+            var sin = [],
+                sin2 = [],
+                cos = [];
+
+            //Data is represented as an array of {x,y} pairs.
+            for (var i = 0; i < 100; i++) {
+                sin.push({
+                    x: i,
+                    y: Math.sin(i / 10)
+                });
+                sin2.push({
+                    x: i,
+                    y: i % 10 == 5 ? null : Math.sin(i / 10) * 0.25 + 0.5
+                });
+                cos.push({
+                    x: i,
+                    y: .5 * Math.cos(i / 10 + 2) + Math.random() / 10
+                });
+            }
+
+            //Line chart data should be sent as an array of series objects.
+            return [{
+                values: sin, //values - represents the array of {x,y} data points
+                key: 'Sine Wave', //key  - the name of the series.
+                color: '#ff7f0e', //color - optional: choose your own line color.
+                strokeWidth: 2,
+                classed: 'dashed'
+            }, {
+                values: cos,
+                key: 'Cosine Wave',
+                color: '#2ca02c'
+            }, {
+                values: sin2,
+                key: 'Another sine wave',
+                color: '#7777ff',
+                area: true //area - set to true if you want this line to turn into a filled area chart.
+            }];
+        };
+    });
+</script>
+
+</html>
